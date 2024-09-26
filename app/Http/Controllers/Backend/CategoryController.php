@@ -73,9 +73,9 @@ class CategoryController extends Controller
     {
         if(Auth::user()){
             if(Auth::user()->role ==1){
-                $category = Category::find($id);
+           $category = Category::find($id);
         
-        return view('backend.admin.category.edit', compact('category'));
+            return view('backend.admin.category.edit', compact('category'));
             }
         }
     }

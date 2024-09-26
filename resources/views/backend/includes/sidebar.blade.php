@@ -178,6 +178,13 @@ header{
           <a href="{{url('/admin/sub-category/create')}}" class="sub-item">Add New</a>
         </div>
       </div>
+      <div class="item">
+        <a class="sub-btn"><i class="fas fa-table"></i>Products<i class="fas fa-angle-right dropdown"></i></a>
+        <div class="sub-menu">
+          <a href="{{url('/admin/product/list')}}" class="sub-item">List</a>
+          <a href="{{url('/admin/product/create')}}" class="sub-item">Add New</a>
+        </div>
+      </div>
      </div>
    </div>
    

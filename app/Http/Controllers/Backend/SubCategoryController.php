@@ -15,7 +15,7 @@ class SubCategoryController extends Controller
     {
         if (Auth::user()) {
             if (Auth::user()->role == 1) {
-                $subCategories = SubCategory::get();
+                $subCategories = SubCategory::with('category')->get();
                 return view('backend.admin.subcategory.list', compact('subCategories'));
             }
         }
@@ -31,10 +31,10 @@ class SubCategoryController extends Controller
         }
     }
 
-    public function subCategoryStore (Request $request)
+    public function subCategoryStore(Request $request)
     {
         if (Auth::user()) {
-            if (Auth::user()->role == 1){
+            if (Auth::user()->role == 1) {
                 $subCategory = new SubCategory();
 
                 $subCategory->cat_id = $request->cat_id;
@@ -48,45 +48,47 @@ class SubCategoryController extends Controller
         }
     }
 
-    public function subCategoryDelete ($id)
+    public function subCategoryDelete($id)
     {
-        if(Auth::user()){
-            if(Auth::user()->role ==1){
+        if (Auth::user()) {
+            if (Auth::user()->role == 1) {
                 $subCategory = SubCategory::find($id);
 
 
-        $subCategory->delete();
-        toastr()->error('Successfully Delete!');
-        return redirect()->back();
+                $subCategory->delete();
+                toastr()->error('Successfully Delete!');
+                return redirect()->back();
             }
         }
     }
 
-    public function subCategoryEdit ($id)
+    public function subCategoryEdit($id)
     {
-        if(Auth::user()){
-            if(Auth::user()->role ==1){
+        if (Auth::user()) {
+            if (Auth::user()->role == 1) {
                 $subCategory = SubCategory::find($id);
-        
-            return view('backend.admin.subcategory.edit', compact('subCategory'));
+                $categories = Category::get();
+                return view('backend.admin.subcategory.edit', compact('subCategory', 'categories'));
             }
         }
     }
 
-    public function subCategoryUpdate (Request $request, $id)
+    public function subCategoryUpdate(Request $request, $id)
     {
-        if(Auth::user()){
-            if(Auth::user()->role ==1){
-            $subCategory = SubCategory::find($id);
+        if (Auth::user()) {
+            if (Auth::user()->role == 1) {
+                $subCategory = SubCategory::find($id);
 
-        $subCategory->name = $request->name;
-        $subCategory->slug = Str::slug($request->name);
+                $subCategory->cat_id = $request->cat_id;
+                $subCategory->name = $request->name;
+                $subCategory->slug = Str::slug($request->name);
 
 
 
-        $subCategory->save();
-        toastr()->success('Successfully Update!');
-        return redirect('/admin/sub-category/list');
+
+                $subCategory->save();
+                toastr()->success('Successfully Update!');
+                return redirect()->back();
             }
         }
     }

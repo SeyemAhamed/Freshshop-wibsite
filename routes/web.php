@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\BackendCategoryControoler;
 use App\Http\Controllers\HomeController;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/',[HomeController::class, 'index']);
-Route::get('/product/detalis', [HomeController::class, 'productDetalis']);
+Route::get('/product/detalis/{id}', [HomeController::class, 'productDetalis']);
 Route::get('/product/view-cart',[HomeController::class,'viewCart']);
 Route::get('/product/Checkout',[HomeController::class,'productCheckout']);
 Route::get('/shop/product',[HomeController::class,'shopProduct']);
@@ -37,6 +38,8 @@ Route::get('/about-us',[HomeController::class,'aboutUs']);
 Route::get('/contact-us',[HomeController::class,'contactUs']);
 Route::get('/blog-page',[HomeController::class,'blogPage']);
 Route::get('/careers-page',[HomeController::class,'careersPage']);
+
+
  
 Auth::routes();
 
@@ -61,3 +64,15 @@ Route::post('/admin/sub-category/Store',[SubCategoryController::class, 'subCateg
 Route::get('/admin/sub-category/delete{id}',[SubCategoryController::class, 'subCategoryDelete']);
 Route::get('/admin/sub-category/edit{id}',[SubCategoryController::class, 'subCategoryEdit']);
 Route::post('/admin/sub-category/update{id}',[SubCategoryController::class, 'subCategoryUpdate']);
+
+//Products.....
+Route::get('/admin/product/list',[ProductController::class, 'productList']);
+Route::get('/admin/product/create',[ProductController::class, 'productCreate']);
+Route::post('/admin/product/Store',[ProductController::class, 'productStore']);
+Route::get('/admin/product/delete{id}',[ProductController::class, 'productDelete']);
+Route::get('/admin/product/edit{id}',[ProductController::class, 'productEdit']);
+Route::post('/admin/product/update{id}',[ProductController::class, 'productUpdate']);
+
+//Add to Cart....
+Route::post('/addtocart-detalis/{id}',[HomeController::class, 'addtoCartDetalis']);
+Route::get('/addtocart-home/{id}',[HomeController::class, 'addtoCartHome']);

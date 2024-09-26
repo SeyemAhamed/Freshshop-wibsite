@@ -8,44 +8,53 @@
                     <div class="row">
                         <div class="col-lg-7 col-md-7">
                             <div class="product-images-slider-outer">
+                                @foreach ($product->galleryImage as $image)
                                 <div class="slider slider-content">
                                     <div>
-                                        <img src="{{asset('frontend/assets/images/product.png')}}" alt="slider images">
+                                        <img src="{{asset('backend/images/galleryImage/'.$image->image)}}" alt="slider images">
                                     </div>
                                 </div>
+                                @endforeach
+                                @foreach ($product->galleryImage as $image)
                                 <div class="slider slider-thumb">
                                     <div>
-                                        <img src="{{asset('frontend/assets/images/product.png')}}" alt="slider images">
+                                        <img src="{{asset('backend/images/galleryImage/'.$image->image)}}" alt="slider images">
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="col-lg-5 col-md-5">
                             <div class="product-details-content">
                                 <h3 class="product-name">
-                                    Test Product
+                                    {{$product->name}}
                                 </h3>
                                 <div class="product-price">
-                                    <span>300 Tk.</span>
+                                    <span>{{$product->discount_price}} Tk.</span>
                                     <span class="" style="color: #f74b81;">
-                                        <del>400 Tk.</del>
+                                        <del>{{$product->regular_price}} Tk.</del>
                                     </span>
                                 </div>
+                                <form action="{{url('/addtocart-detalis/'.$product->id)}}" method="POST">
+                                    @csrf
+                                    @foreach ($product->color as $color)
                                 <div class="product-details-select-items-wrap">
                                     <div class="product-details-select-item-outer">
-                                        <input type="radio" name="color" id="color" value="Red" class="category-item-radio">
+                                        <input type="radio" name="color" id="color" value="{{$color->color_name}}" class="category-item-radio">
                                         <label for="color" class="category-item-label">
-                                            Red
+                                            {{$color->color_name}}
                                         </label>
                                     </div>
                                 </div>
+                                @endforeach
+                                @foreach ($product->size as $size)
                                 <div class="product-details-select-items-wrap">
                                     <div class="product-details-select-item-outer">
-                                        <input type="radio" name="size" value="XXl" class="category-item-radio">
-                                        <label for="size" class="category-item-label">XXl</label>
+                                        <input type="radio" name="size" value="{{$size->size_name}}" class="category-item-radio">
+                                        <label for="size" class="category-item-label">{{$size->size_name}}</label>
                                     </div>
                                 </div>
-                                <form action="" method="POST">
+                                @endforeach
                                     <div class="purchase-info-outer">
                                         <div class="product-incremnt-decrement-outer" style="display: block">
                                             <a title="Decrement" class="decrement-btn" style="margin-top: -10px;">
@@ -95,7 +104,7 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis minus, ut unde laudantium accusamus odio nam officia aperiam excepturi quis nesciunt eveniet eligendi, corrupti voluptatibus. Similique doloremque velit optio aliquam.
+                                {!!$product->long_desc!!}
                             </div>
                             <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
                                 <div class="review-item-wrapper">
@@ -121,8 +130,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-policy" role="tabpanel" aria-labelledby="pills-policy-tab">
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis minus,
-                                ut unde laudantium accusamus odio nam officia aperiam excepturi quis nesciunt eveniet eligendi
+                            {!!$product->product_policy!!}
                             </div>
                         </div>
                     </div>
@@ -145,3 +153,25 @@
     </div>
 </section>
 @endsection
+
+@push('script')
+    <script>
+        var qtyInput = document.getElementById('qty');
+
+        var plusBtn = document.querySelector('.increment-btn')
+        var minusBtn = document.querySelector('.decrement-btn')
+
+        plusBtn.addEventListener('click',function(){
+            if(parseInt(qtyInput.value))<=5{
+                qtyInput.value = parseInt(qtyInput.value) +1;
+            }
+        })
+
+        plusBtn.addEventListener('click',function(){
+            if(parseInt(qtyInput.value))>1{
+                qtyInput.value = parseInt(qtyInput.value) -1;
+            }
+ 
+        })
+    </script>
+@endpush

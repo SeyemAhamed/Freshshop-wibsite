@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-              <h3 class="card-title text-secondary">Sub-Category List</h3>
+              <h3 class="card-title text-secondary">Product List</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body text-secondary">
@@ -14,20 +14,32 @@
                 <thead>
                 <tr>
                   <th>SL</th>
-                  <th>Sub-Category Name</th>
+                  <th>Image</th>
+                  <th>Name</th>
                   <th>Category</th>
+                  <th>Qty</th>
+                  <th>Buy Price</th>
+                  <th>Regular Price</th>
+                  <th>Discount Price</th>
                   <th>Action</th>                
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($subCategories as $subCategory)
+                @foreach ($products as $product)
                 <tr>
                   <td>{{$loop->index+1}}</td>
-                  <td>{{$subCategory->name}}</td>
-                  <td>{{$subCategory->category}}</td>
                   <td>
-                    <a href="{{url('/admin/sub-category/edit'.$subCategory->id)}}" class="btn btn-primary">Edit</a>
-                    <a href="{{url('/admin/sub-category/delete'.$subCategory->id)}}" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
+                    <img src="{{asset('backend/images/product/'.$product->image)}}" alt="product" height="100" width="100">
+                  </td>
+                  <td>{{$product->name}}</td>
+                  {{-- <td>{{$product->category->name}}</td> --}}
+                  <td>{{$product->qty}}</td>
+                  <td>{{$product->buy_price}}</td>
+                  <td>{{$product->regular_price}}</td>
+                  <td>{{$product->discount_price}}</td>
+                  <td>
+                    <a href="{{url('/admin/product/edit'.$product->id)}}" class="btn btn-primary">Edit</a>
+                    <a href="{{url('/admin/product/delete'.$product->id)}}" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
                   </td>
                   
                 </tr>
