@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\BackendCategoryControoler;
 use App\Http\Controllers\HomeController;
@@ -76,3 +78,50 @@ Route::post('/admin/product/update{id}',[ProductController::class, 'productUpdat
 //Add to Cart....
 Route::post('/addtocart-detalis/{id}',[HomeController::class, 'addtoCartDetalis']);
 Route::get('/addtocart-home/{id}',[HomeController::class, 'addtoCartHome']);
+Route::get('/addtocart-delete/{id}',[HomeController::class, 'addtoCartDelete']);
+
+//Make Order....
+Route::post('/confirm-order',[HomeController::class, 'confirmOrder']);
+Route::get('/order-confirmed/{invoiceId}',[HomeController::class, 'thankyouPgae']);
+
+//Search Products...
+Route::get('/search-products',[HomeController::class,'searchProducts']);
+
+//Category Products....
+Route::get('/category-product/{id}',[HomeController::class, 'categoryProducts']);
+Route::get('/sub-category-product/{id}',[HomeController::class, 'subCategoryProducts']);
+
+//Settings.....
+Route::get('/admin/general-setting',[SettingController::class, 'generalSetting']);
+Route::post('/admin/general-setting/update',[SettingController::class, 'updateSetting']);
+Route::get('/admin/home-banner',[SettingController::class, 'homeBanner']);
+Route::post('/admin/home-banner/update',[SettingController::class, 'updatehomeBanner']);
+
+
+//Orders....
+Route::get('/admin/order/edit/{id}',[OrderController::class, 'editOrders']);
+Route::post('/admin/order/update/{id}',[OrderController::class, 'updateOrders']);
+Route::get('/admin/order/all-orders',[OrderController::class, 'allOrders']);
+Route::get('/admin/order/today-orders',[OrderController::class, 'todayOrders']);
+Route::get('/admin/order/pending-orders',[OrderController::class, 'pendingOrders']);
+Route::get('/admin/order/confirmed-orders',[OrderController::class, 'confirmedOrders']);
+Route::get('/admin/order/delivered-orders',[OrderController::class, 'deliveredOrders']);
+Route::get('/admin/order/cancelled-orders',[OrderController::class, 'cancelledOrders']);
+Route::get('/admin/order/status-pending/{id}',[OrderController::class, 'statusPending']);
+Route::get('/admin/order/status-confirmed/{id}',[OrderController::class, 'statusConfirmed']);
+Route::get('/admin/order/status-delivered/{id}',[OrderController::class, 'statusDelivered']);
+Route::get('/admin/order/status-cancelled/{id}',[OrderController::class, 'statusCancelled']);
+Route::get('/admin/order/details/{id}',[OrderController::class, 'orderDetails']);
+Route::post('/admin/order/update/{id}',[OrderController::class, 'orderUpdate']);
+
+//Authentication...
+Route::get('/admin/logout',[SettingController::class, 'adminLogout']);
+Route::get('/admin/credntials',[SettingController::class, 'admincredntials']);
+Route::post('/admin/credntials/update',[SettingController::class, 'admincredntialsUpdate']);
+
+//Employee...
+Route::get('/admin/employee-list',[AdminController::class, 'employeeList']);
+Route::get('/admin/employee-create',[AdminController::class, 'employeeCreate']);
+Route::post('/admin/employee-store',[AdminController::class, 'employeeStore']);
+Route::get('/admin/employee-edit/{id}',[AdminController::class, 'employeeEdit']);
+Route::post('/admin/employee-update/{id}',[AdminController::class, 'employeeUpdate']);

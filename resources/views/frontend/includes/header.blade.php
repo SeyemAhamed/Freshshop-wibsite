@@ -5,7 +5,8 @@
                 <img src="{{asset('frontend/assets/images/logo.png')}}" alt="Logo">
             </a>
             <div class="search-form-outer">
-                <form action="" method="GET" class="form-group search-form">
+                <form action="{{url('/search-products')}}" method="GET" class="form-group search-form">
+                    @csrf
                     <input type="text" name="search" class="form-control" placeholder="Search for items...">
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </form>
@@ -55,7 +56,7 @@
                                     @endif
                                 </div>
                                 <div class="cart-item-delete">
-                                    <a href="#" class="delete-btn">
+                                    <a href="{{url('/addtocart-delete/'.$cart->id)}}" class="delete-btn">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
@@ -89,19 +90,23 @@
                         </div>
                         <div class="header__category-items-outer">
                             <ul class="header__category-list">
+                                @foreach ($allCategories as $category)
                                 <li class="header__category-list-item item-has-submenu">
-                                    <a href="category-product.html" class="header__category-list-item-link">
-                                        <img src="{{asset('frontend/assets/images/product.png')}}" alt="category">
-                                        Test Category
+                                    <a href="{{url('/category-product/'.$category->id)}}" class="header__category-list-item-link">
+                                        <img src="{{asset('backend/images/category/'.$category->image)}}" alt="category">
+                                        {{$category->name}}
                                     </a>
                                     <ul class="header__nav-item-category-submenu">
+                                        @foreach ($category->subcategories as $subCategory)
                                         <li class="header__category-submenu-item">
-                                            <a href="sub-category-product.html" class="header__category-submenu-item-link">
-                                                Test Subcategory
+                                            <a href="{{url('/sub-category-product/'.$subCategory->id)}}" class="header__category-submenu-item-link">
+                                                {{$subCategory->name}}
                                             </a>
                                         </li>
+                                        @endforeach
                                     </ul>
                                 </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

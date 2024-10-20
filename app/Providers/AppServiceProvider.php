@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Category;
+use App\Models\Setting;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view){
             $view->with('addtoCartCount',Cart::where('ip_address', request()->ip())->count());
             $view->with('cartProduct', Cart::where('ip_address', request()->ip())->with('product')->get());
+            $view->with('frontendSettings', Setting::first());
+            $view->with('allCategories', Category::with('subcategories')->get());
+            $view->with('allSubCategories', SubCategory::get());
         });
     }
 }

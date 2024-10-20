@@ -164,25 +164,60 @@ header{
      <div class="menu">
       <div class="item"><a href="{{url('/admin/dashboard')}}"><i class="fas fa-desktop"></i>Dashboard</a></div>
       <div class="item">
-       <div class="item">
-         <a class="sub-btn"><i class="fas fa-table"></i>Category<i class="fas fa-angle-right dropdown"></i></a>
+        @if (auth()->user()->role ==1)
+        <div class="item">
+          <a class="sub-btn"><i class="fas fa-table"></i>Category<i class="fas fa-angle-right dropdown"></i></a>
+          <div class="sub-menu">
+            <a href="{{url('/admin/category/list')}}" class="sub-item">List</a>
+            <a href="{{url('/admin/category/create')}}" class="sub-item">Add New</a>
+          </div>
+        </div>
+        <div class="item">
+         <a class="sub-btn"><i class="fas fa-table"></i>Sub-Category<i class="fas fa-angle-right dropdown"></i></a>
          <div class="sub-menu">
-           <a href="{{url('/admin/category/list')}}" class="sub-item">List</a>
-           <a href="{{url('/admin/category/create')}}" class="sub-item">Add New</a>
+           <a href="{{url('/admin/sub-category/list')}}" class="sub-item">List</a>
+           <a href="{{url('/admin/sub-category/create')}}" class="sub-item">Add New</a>
          </div>
        </div>
        <div class="item">
-        <a class="sub-btn"><i class="fas fa-table"></i>Sub-Category<i class="fas fa-angle-right dropdown"></i></a>
+         <a class="sub-btn"><i class="fas fa-table"></i>Products<i class="fas fa-angle-right dropdown"></i></a>
+         <div class="sub-menu">
+           <a href="{{url('/admin/product/list')}}" class="sub-item">List</a>
+           <a href="{{url('/admin/product/create')}}" class="sub-item">Add New</a>
+         </div>
+       </div>
+        @endif
+      <div class="item">
+        <a class="sub-btn"><i class="fas fa-table"></i>Order<i class="fas fa-angle-right dropdown"></i></a>
         <div class="sub-menu">
-          <a href="{{url('/admin/sub-category/list')}}" class="sub-item">List</a>
-          <a href="{{url('/admin/sub-category/create')}}" class="sub-item">Add New</a>
+          <a href="{{url('/admin/order/all-orders')}}" class="sub-item">All Orders</a>
+          <a href="{{url('/admin/order/pending-orders')}}" class="sub-item">Pending Orders</a>
+          <a href="{{url('/admin/order/confirmed-orders')}}" class="sub-item">Confirmed Orders</a>
+          <a href="{{url('/admin/order/delivered-orders')}}" class="sub-item">Delivered Orders</a>
+          <a href="{{url('/admin/order/cancelled-orders')}}" class="sub-item">Cancelled Orders</a>
+        </div>
+      </div>
+      @if (auth()->user()->role ==1)
+      <div class="item">
+        <a class="sub-btn"><i class="fas fa-table"></i>Employee<i class="fas fa-angle-right dropdown"></i></a>
+        <div class="sub-menu">
+          <a href="{{url('/admin/employee-list')}}" class="sub-item">List</a>
+          <a href="{{url('/admin/employee-create')}}" class="sub-item">Add New</a>
         </div>
       </div>
       <div class="item">
-        <a class="sub-btn"><i class="fas fa-table"></i>Products<i class="fas fa-angle-right dropdown"></i></a>
+        <a class="sub-btn"><i class="fas fa-table"></i>Settings<i class="fas fa-angle-right dropdown"></i></a>
         <div class="sub-menu">
-          <a href="{{url('/admin/product/list')}}" class="sub-item">List</a>
-          <a href="{{url('/admin/product/create')}}" class="sub-item">Add New</a>
+          <a href="{{url('/admin/general-setting')}}" class="sub-item">General Setting</a>
+          <a href="{{url('/admin/home-banner')}}" class="sub-item">Home Banner</a>
+        </div>
+      </div>
+      @endif
+      <div class="item">
+        <a class="sub-btn"><i class="fas fa-table"></i>Authentication<i class="fas fa-angle-right dropdown"></i></a>
+        <div class="sub-menu">
+          <a href="{{url('/admin/logout')}}" class="sub-item">Logout</a>
+          <a href="{{url('/admin/credntials')}}" class="sub-item">Credentials</a>
         </div>
       </div>
      </div>

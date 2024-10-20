@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderRequest;
 use App\Models\Cart;
+use App\Models\Category;
+use App\Models\HomeBanner;
+use App\Models\Order;
+use App\Models\OrderDetalis;
 use App\Models\Product;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -14,7 +20,8 @@ class HomeController extends Controller
         $newProducts = Product::where('product_type', 'new')->orderBy('id', 'desc')->get();
         $regularProducts = Product::where('product_type', 'regular')->orderBy('id', 'desc')->get();
         $discountProducts = Product::where('product_type', 'discount')->orderBy('id', 'desc')->get();
-        return view ('home.index', compact('hotProducts','newProducts','regularProducts', 'discountProducts'));
+        $homeBanner = HomeBanner::first();
+        return view ('home.index', compact('hotProducts','newProducts','regularProducts', 'discountProducts','homeBanner'));
     }
     
     public function productDetalis ($id)
@@ -33,9 +40,21 @@ class HomeController extends Controller
         return view('home.checkout');
     }
 
-    public function shopProduct ()
+    public function shopProduct (Request $request)
     {
-        return view('home.shop-product');
+        if(isset($request->categoryId)){
+            $type = 'category';
+            $categoryProducts = Category::where('id', $request->categoryId)->with('product')->first();
+            return view('home.shop-product', compact('categoryProducts','type'));
+        }
+        if(isset($request->subCategoryId)){
+            $type = 'subCategory';
+            $subCategoryProducts = SubCategory::where('id', $request->subCategoryId)->with('product')->first();
+            return view('home.shop-product', compact('subCategoryProducts', 'type'));
+        }
+        $type = 'normal';
+        $product = Product::orderBy('id', 'desc')->get();
+        return view('home.shop-product', compact('product', 'type'));
     }
 
     public function returnProduct ()
@@ -150,6 +169,91 @@ class HomeController extends Controller
             $cartProduct->save();
             toastr()->success('Added to Cart!');
             return redirect()->back();
+        }
+    }
+
+    public function addtoCartDelete ($id)
+    {
+        $cartProduct = Cart::find($id);
+        $cartProduct->delete();
+
+        
+        return redirect()->back();
+    }
+
+    //Confirm Order...
+    public function confirmOrder (OrderRequest $request)
+    {
+        $order = new Order();
+
+        $previousOrder = Order::orderBy('id','desc')->first();
+        if ($previousOrder == null){
+            $order->invoiceId = 'MOM-1';
+        }
+        if($previousOrder != null){
+            $generateInvoiceId = 'MOM-'.$previousOrder->id+1;
+            $order->invoiceId =  $generateInvoiceId;
+        }
+
+        $order->c_name = $request->c_name;
+        $order->c_phone = $request->c_phone;
+        $order->c_email = $request->c_email;
+        $order->address = $request->address;
+        $order->area = $request->area;
+        $order->price = $request->inputgrandTotal;
+
+        //Store Info into OrderDetalis table....
+        $cartProduct = Cart::with('product')->where('ip_address', $request->ip())->get();
+        if($cartProduct->isNotEmpty()){
+            $order->save();
+            foreach($cartProduct as $cart){
+                $orderDetalis = new OrderDetalis();
+
+                $orderDetalis->order_id = $order->id;
+                $orderDetalis->product_id = $cart->product_id;
+                $orderDetalis->qty = $cart->qty;
+                $orderDetalis->price = $cart->price;
+                $orderDetalis->size = $cart->size;
+                $orderDetalis->color = $cart->color;
+
+                $orderDetalis->save();
+                $cart->delete();
+            }
+        }
+
+        else{
+            toastr()->warning('No Products in your cart');
+            return redirect('/');
+        }
+
+        toastr()->success('Order is placed successfully!');
+        return redirect('/order-confirmed/'.$generateInvoiceId );
+    }
+
+    public function thankyouPgae ($invoiceId)
+    {
+        return view('home.thankyou', compact('invoiceId'));
+    }
+
+    //Category Products...
+    public function categoryProducts ($id)
+    {
+        $categoryProducts = Category::where('id', $id)->with('product')->first();
+        return view('home.category-product', compact('categoryProducts'));
+    }
+
+    public function subCategoryProducts ($id)
+    {
+        $subCategoryProducts = SubCategory::where('id', $id)->with('product')->first();
+        return view('home.sub-category-product', compact('subCategoryProducts'));
+    }
+
+    //Search Products...
+    public function searchProducts (Request $request)
+    {
+        if(isset($request->search)){
+            $product = Product::where('name', 'LIKE', '%'.$request->search.'%')->get();
+            return view('home.search-product', compact('product'));
         }
     }
 }
